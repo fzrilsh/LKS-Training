@@ -19,6 +19,7 @@ Dengan menyediakan sumber belajar terstruktur dan alat kolaborasi, platform ini 
 2. **Marking Mandiri**: Fitur untuk mengoreksi module yang telah dikerjakan.
 3. **Serve Media File**: Fitur untuk serve API yang dibutuhkan pada setiap modulenya.
 4. **Kontribusi Pengguna**: Pengguna terdaftar dapat membagikan modul mereka sendiri dengan format yang telah ditentukan oleh pengembang proyek ini.
+5. **Forum Diskusi**: Fitur forum di mana pengguna dapat membuat pertanyaan, berdiskusi, dan menjawab pertanyaan dari pengguna lain untuk berbagi pengetahuan.
 
 ## 👥 Siapa yang Bisa Bergabung?
 Platform ini terbuka untuk:
