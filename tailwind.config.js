@@ -1,4 +1,5 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
+import forms from '@tailwindcss/forms';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -8,6 +9,10 @@ export default {
         './resources/**/*.blade.php',
         './resources/**/*.js',
         './resources/**/*.vue',
+        './vendor/tallstackui/tallstackui/src/**/*.php',
+    ],
+    presets: [
+        require('./vendor/tallstackui/tallstackui/tailwind.config.js') 
     ],
     theme: {
         extend: {
@@ -16,5 +21,5 @@ export default {
             },
         },
     },
-    plugins: [],
+    plugins: [forms],
 };
