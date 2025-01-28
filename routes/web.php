@@ -3,8 +3,10 @@
 use App\Http\Controllers\Auth\SocialiteController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware(['auth:web'])->group(function(){
+    Route::get('/', function () {
+        return view('welcome');
+    })->name('dashboard');
 });
 
 Route::controller(SocialiteController::class)->group(function(){
