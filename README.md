@@ -1,7 +1,7 @@
 # Platform Latihan LKS Web Technologies
 
 ## 🚀 Tentang Proyek
-Proyek ini adalah **platform berbasis web** yang dirancang menggunakan framework **Laravel** untuk membantu siswa mempersiapkan diri menghadapi **Lomba Kompetensi Siswa (LKS)** dalam bidang **Web Technologies**. Platform ini dirancang untuk dijalankan secara lokal, dengan beberapa fitur terbatas, dan menggunakan **FTP** sebagai fasilitas untuk berbagi dan input modul.
+Proyek ini adalah **platform berbasis web** yang dirancang menggunakan framework **Laravel** dan **Livewire** untuk membantu siswa mempersiapkan diri menghadapi **Lomba Kompetensi Siswa (LKS)** dalam bidang **Web Technologies**. Platform ini dirancang untuk dijalankan secara lokal, dengan beberapa fitur terbatas, dan menggunakan **FTP** sebagai fasilitas untuk berbagi dan input modul.
 
 Dengan menyediakan sumber belajar terstruktur dan alat kolaborasi, platform ini bertujuan untuk:
 
