@@ -9,8 +9,7 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <title>{{ $title }}</title>
 
-    <meta name="description"
-        content="{{ $description ?? 'Platform belajar interaktif untuk latihan dan persiapan LKS Web Technologies. Akses modul latihan, marking mandiri, dan berbagi materi untuk membantu siswa mencapai standar kompetisi nasional dan internasional.' }}">
+    <meta name="description" content="{{ $description ?? 'Platform belajar interaktif untuk latihan dan persiapan LKS Web Technologies. Akses modul latihan, marking mandiri, dan berbagi materi untuk membantu siswa mencapai standar kompetisi nasional dan internasional.' }}">
     <meta name="keywords" content="web technologies, web technology, web tech, webtech, lks, lomba kompetensi siswa">
     <link rel="shortcut icon" href="{{ asset('images/logo.jpg') }}" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/logo.jpg') }}">
@@ -56,6 +55,7 @@
 </head>
 
 <body class="text-gray-800 bg-gray-100">
+    <x-toast /> 
     <div id="app" class="flex flex-col lg:flex-row min-h-screen">
         <aside id="sidebar" class="fixed lg:relative bg-white w-72 h-full lg:h-screen top-0 left-0 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 z-50 shadow-lg lg:shadow-none">
             <div class="p-6 flex flex-col gap-8 border-r h-full">
