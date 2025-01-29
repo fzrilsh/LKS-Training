@@ -4,19 +4,15 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'google_id',
         'name',
@@ -24,24 +20,35 @@ class User extends Authenticatable
         'avatar_url',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
+    protected $appends = [
+        'module_tasks',
+        'module_token'
+    ];
+
     protected $hidden = [
         'password',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'password' => 'hashed',
         ];
+    }
+
+    public function ModuleTasks(): HasMany{
+        return $this->hasMany(ModuleTask::class, 'user_id', 'id');
+    }
+
+    public function ModuleToken(): HasOne {
+        return $this->hasOne(ModuleToken::class, 'user_id', 'id');
+    }
+
+    public function getModuleTasksAttribute(){
+        return $this->ModuleTasks()->get();
+    }
+
+    public function getModuleTokenAttribute(){
+        return $this->ModuleToken()->first();
     }
 }
