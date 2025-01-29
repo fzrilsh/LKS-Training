@@ -36,6 +36,6 @@ class SocialiteController extends Controller
         ]);
 
         auth('web')->login($user);
-        return redirect()->route('dashboard');
+        return redirect()->route('clientarea.dashboard');
     }
 }
