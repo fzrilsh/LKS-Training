@@ -13,7 +13,7 @@
         <!-- Form -->
         <form id="userForm" class="space-y-6" method="GET" action="{{ route('auth.google') }}">
             <!-- Sign In Button -->
-            <button type="submit" class="w-full bg-gradient-to-r from-purple-500 to-purple-700 text-white font-semibold py-3 rounded-full hover:from-purple-600 hover:to-purple-800 transition-all">
+            <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-3 rounded-full hover:blue-purple-600 hover:to-blue-800 transition-all">
                 Login With <img src="{{ asset('images/icons/google.png') }}" alt="google-icon" class="inline w-10 ml-2 rounded-full bg-white p-1">
             </button>
         </form>
