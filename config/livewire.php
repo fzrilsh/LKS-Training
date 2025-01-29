@@ -158,5 +158,5 @@ return [
 
     'pagination_theme' => 'tailwind',
 
-    'asset_url' => '/vendor'
+    'asset_url' => '/vendor/livewire/livewire.js'
 ];
