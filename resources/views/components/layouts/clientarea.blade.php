@@ -50,11 +50,6 @@
         }
     </style>
 
-    <script src="{{ asset('js/wow.min.js') }}"></script>
-    <script>
-        new WOW().init();
-    </script>
-
     <tallstackui:script />
     @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
