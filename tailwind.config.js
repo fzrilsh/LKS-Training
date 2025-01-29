@@ -11,14 +11,22 @@ export default {
         './resources/**/*.vue',
         './vendor/tallstackui/tallstackui/src/**/*.php',
     ],
+    darkMode: "class",
     presets: [
         require('./vendor/tallstackui/tallstackui/tailwind.config.js') 
     ],
     theme: {
+        container: {
+            center: true,
+            padding: "16px",
+        },
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                primary: "#3758F9",
+            }
         },
     },
     plugins: [forms],
