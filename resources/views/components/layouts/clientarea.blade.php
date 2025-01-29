@@ -72,31 +72,25 @@
                 </div>
                 <nav class="flex flex-col gap-4">
                     <h3 class="font-semibold text-sm text-gray-500">GENERAL</h3>
-                    <a href="{{ route('clientarea.dashboard') }}"
-                        class="flex items-center gap-3 p-3 rounded-lg bg-blue-200">
-                        <img src="{{ asset('images/icons/3dcube.svg') }}" alt="Overview Icon" class="w-6 h-6">
+                    <a href="{{ route('clientarea.dashboard') }}" class="flex items-center gap-3 p-3 rounded-lg {{ request()->routeIs('clientarea.dashboard') ? 'bg-blue-200' : 'hover:bg-gray-100' }}">
+                        <i class="fa fa-chart-bar text-lg"></i>
                         <span class="font-medium">Overview</span>
                     </a>
-                    <a href="dashboard-my-people.html"
-                        class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100">
-                        <img src="{{ asset('images/icons/profile-2user.svg') }}" alt="My People Icon"
-                            class="w-6 h-6">
-                        <span class="font-medium">My People</span>
+                    <a href="dashboard-my-people.html" class="flex items-center gap-3 p-3 rounded-lg {{ request()->routeIs('clientarea.as') ? 'bg-blue-200' : 'hover:bg-gray-100' }}">
+                        <i class="fa fa-comments text-lg"></i>
+                        <span class="font-medium">Forum Diskusi</span>
                     </a>
-                    <a href="tasks.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100">
-                        <img src="{{ asset('images/icons/note-favorite.svg') }}" alt="Manage Task Icon"
-                            class="w-6 h-6">
-                        <span class="font-medium">Manage Task</span>
+                    <a href="tasks.html" class="flex items-center gap-3 p-3 rounded-lg {{ request()->routeIs('clientarea.as') ? 'bg-blue-200' : 'hover:bg-gray-100' }}">
+                        <i class="fa fa-hand-holding-heart text-lg"></i>
+                        <span class="font-medium">Kontribusi Modul</span>
                     </a>
-                    <a href="dashboard-rewards.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100">
-                        <img src="{{ asset('images/icons/crown.svg') }}" alt="Rewards Icon" class="w-6 h-6">
-                        <span class="font-medium">Rewards</span>
+                    <a href="dashboard-rewards.html" class="flex items-center gap-3 p-3 rounded-lg {{ request()->routeIs('clientarea.as') ? 'bg-blue-200' : 'hover:bg-gray-100' }}">
+                        <i class="fa fa-cloud-upload-alt text-lg"></i>
+                        <span class="font-medium">Upload Assets</span>
                     </a>
-                    <a href="dashboard-ai-customs.html"
-                        class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100">
-                        <img src="{{ asset('images/icons/hierarchy-square-3.svg') }}" alt="AI Customs Icon"
-                            class="w-6 h-6">
-                        <span class="font-medium">AI Customs</span>
+                    <a href="dashboard-ai-customs.html" class="flex items-center gap-3 p-3 rounded-lg {{ request()->routeIs('clientarea.as') ? 'bg-blue-200' : 'hover:bg-gray-100' }}">
+                        <i class="fa fa-sign-out-alt text-lg"></i>
+                        <span class="font-medium">Logout</span>
                     </a>
                 </nav>
             </div>
