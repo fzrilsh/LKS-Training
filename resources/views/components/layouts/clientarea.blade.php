@@ -84,11 +84,11 @@
                         <i class="fa fa-hand-holding-heart text-lg"></i>
                         <span class="font-medium">Kontribusi Modul</span>
                     </a>
-                    <a href="dashboard-rewards.html" class="flex items-center gap-3 p-3 rounded-lg {{ request()->routeIs('clientarea.as') ? 'bg-blue-200' : 'hover:bg-gray-100' }}">
+                    <a href="{{ route('clientarea.upload-assets') }}" class="flex items-center gap-3 p-3 rounded-lg {{ request()->routeIs('clientarea.upload-assets') ? 'bg-blue-200' : 'hover:bg-gray-100' }}">
                         <i class="fa fa-cloud-upload-alt text-lg"></i>
                         <span class="font-medium">Upload Assets</span>
                     </a>
-                    <a href="dashboard-ai-customs.html" class="flex items-center gap-3 p-3 rounded-lg {{ request()->routeIs('clientarea.as') ? 'bg-blue-200' : 'hover:bg-gray-100' }}">
+                    <a href="{{ route('logout') }}" class="flex items-center gap-3 p-3 rounded-lg {{ request()->routeIs('logout') ? 'bg-blue-200' : 'hover:bg-gray-100' }}">
                         <i class="fa fa-sign-out-alt text-lg"></i>
                         <span class="font-medium">Logout</span>
                     </a>
