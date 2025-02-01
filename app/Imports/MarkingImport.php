@@ -2,17 +2,16 @@
 
 namespace App\Imports;
 
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\ToArray;
 
-class MarkingImport implements ToCollection
+class MarkingImport implements ToArray
 {
     /**
-    * @param Collection $collection
+    * @param Array $rows
     */
-    public function collection(Collection $rows)
+    public function array(array $rows)
     {
-        $filtered = $rows->filter(function ($row) {
+        $filtered = collect($rows)->filter(function ($row) {
             return isset($row[3]) && $row[3] === 'M';
         });
 
@@ -24,6 +23,6 @@ class MarkingImport implements ToCollection
             ];
         });
 
-        return $results;
+        return $results->toArray();
     }
 }
