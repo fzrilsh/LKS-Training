@@ -8,6 +8,7 @@ use App\Models\ModuleChangelog;
 use App\Models\ModuleToken;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -35,7 +36,7 @@ class ScanModule implements ShouldQueue
         $zips->each(function ($filename) {
             $fullPath = Storage::path($filename);
 
-            $destinationFolderName = now()->format('d-m-Y_pukul H:i:s').'_'.Str::random(10);
+            $destinationFolderName = now()->format('d-m-Y_H:i:s').'_'.Str::random(10);
             $destinationFolderPath = Storage::path("modules/{$destinationFolderName}");
 
             $zip = new ZipArchive;
@@ -43,21 +44,20 @@ class ScanModule implements ShouldQueue
                 $zip->extractTo($destinationFolderPath);
                 $zip->close();
 
+                $this->getModuleDetail("modules/{$destinationFolderName}", date('d-m-Y H:i', filectime(Storage::path($filename))));
                 // Storage::delete($filename);
-                $this->getModuleDetail("modules/{$destinationFolderName}");
             } else {
                 Log::error("Failed to open: {$filename}");
             }
         });
     }
 
-    public function getModuleDetail(string $path)
+    public function getModuleDetail(string $path, $filecreatedAt)
     {
         if (! Storage::exists($path.'/readme.txt')) {
-            $date = date('d-m-Y H:i', filectime(Storage::path($path)));
             $filename = basename($path);
 
-            ModuleChangelog::query()->create(['message' => "Module yang diupload dengan nama file {$filename} pada {$date} tidak sesuai format."]);
+            ModuleChangelog::query()->create(['message' => "Module yang diupload dengan nama file {$filename} pada {$filecreatedAt} tidak sesuai format."]);
 
             return $this->deleteModule($path);
         }
@@ -66,8 +66,7 @@ class ScanModule implements ShouldQueue
 
         $token = ModuleToken::query()->where('token', $token)->first();
         if (! $token) {
-            $date = date('d-m-Y H:i', filectime(Storage::path($path)));
-            ModuleChangelog::query()->create(['message' => "Token untuk module yang diupload pada {$date} tidak valid."]);
+            ModuleChangelog::query()->create(['message' => "Token untuk module yang diupload pada {$filecreatedAt} tidak valid."]);
 
             return $this->deleteModule($path);
         }
@@ -111,8 +110,8 @@ class ScanModule implements ShouldQueue
         }
 
         if (
-            (Storage::size(Storage::path("{$path}/{$moduleFilename}")) < 1048576) ||
-            (Storage::size(Storage::path("{$path}/{$markingFilename}")) < 500000)
+            (filesize(Storage::path("{$path}/{$moduleFilename}")) < 1000) ||
+            (filesize(Storage::path("{$path}/{$markingFilename}")) < 1000)
         ) {
             $errors[] = 'File wajib seperti Module atau Marking kosong.';
         }
@@ -129,21 +128,20 @@ class ScanModule implements ShouldQueue
             $errors[] = 'File xlsx marking tidak ditemukan.';
         }
 
-        $markingData = Excel::toArray(new MarkingImport, Storage::path("{$path}/{$markingFilename}"));
-        if (! count($markingData)) {
+        $markingData = filesize(Storage::path("{$path}/{$markingFilename}")) > 0 ? $this->parseExcel(Excel::toArray(new MarkingImport, Storage::path("{$path}/{$markingFilename}"))[0]) : [];
+        if (! $markingData->count()) {
             $errors[] = 'File xlsx marking tidak sesuai format.';
         }
 
         if (count($errors)) {
-            $date = now()->format('d-m-Y pukul H:i:s');
-            $error = collect($errors)->join('\n- ');
+            $error = collect($errors)->join("\n- ");
 
-            ModuleChangelog::query()->create(['message' => "Module yang diupload bernama {$name} pada {$date} tidak sesuai format yang telah ditentukan.\n- {$error}"]);
+            ModuleChangelog::query()->create(['message' => "Module yang diupload dengan nama {$name} pada {$filecreatedAt} tidak sesuai format yang telah ditentukan.\n- {$error}"]);
 
             return $this->deleteModule($path);
         }
 
-        Module::query()->create([
+        $module = Module::query()->create([
             'name' => $name,
             'category' => strtolower($category),
             'summary' => $summary,
@@ -153,7 +151,13 @@ class ScanModule implements ShouldQueue
             'publisher_id' => $token->user_id,
         ]);
 
+        $module->Marking()->create([
+            'json' => json_encode($markingData->toArray()),
+            'max_point' => $markingData->reduce(fn($a, $b) => $a + $b['total_point'])
+        ]);
+
         $token->delete();
+        ModuleChangelog::query()->create(['message' => "Module yang diupload dengan nama {$name} pada {$filecreatedAt} telah lulus verifikasi."]);
     }
 
     public function parseReadme(string $input): array
@@ -178,5 +182,43 @@ class ScanModule implements ShouldQueue
     public function deleteModule(string $path): void
     {
         File::deleteDirectory(Storage::path($path));
+    }
+
+    public function parseExcel(array $rows): Collection{
+        $headers = $rows[0];
+
+        $columns = [];
+        foreach ($headers as $index => $header) {
+            if(is_null($header)) continue;
+
+            if (str_contains(strtolower($header), 'aspect - description')) {
+                $columns['description'] = $index;
+            }
+
+            if (str_contains(strtolower($header), 'max')) {
+                $columns['total_point'] = $index;
+            }
+
+            if (str_contains(strtolower($header), 'requirement')) {
+                $columns['requirement'] = $index;
+            }
+        }
+
+        if(!count($columns)) return collect([]);
+
+        $filtered = collect($rows)->filter(function ($row) {
+            return isset($row[3]) && $row[3] === 'M';
+        });
+
+        $results = $filtered->map(function ($row) use ($columns) {
+            return [
+                'description' => $row[$columns['description']] ?? null,
+                'total_point' => $row[$columns['total_point']] ?? null,
+                'requirement' => $row[$columns['requirement']] ?? null,
+                'point' => 0,
+            ];
+        });
+
+        return $results->values();
     }
 }
