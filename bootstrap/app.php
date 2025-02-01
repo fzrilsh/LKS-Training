@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Console\Scheduling\Schedule;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -18,4 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function(NotFoundHttpException $e){
             return response()->view('livewire.conditions.not-found', [], 404);
         });
+    })
+    ->withSchedule(function(Schedule $schedule){
+        
     })->create();
