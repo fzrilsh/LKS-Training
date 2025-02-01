@@ -83,7 +83,7 @@
                                         </a>
                                     </li>
                                     <li class="group relative">
-                                        <a href="https://github.com/fzrilsh/LKS-Training"
+                                        <a href="https://github.com/fzrilsh/WebTech-Academy"
                                             class="ud-menu-scroll mx-8 flex py-2 text-base font-medium text-dark group-hover:text-primary dark:text-white lg:ml-7 lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 lg:text-white lg:group-hover:text-white lg:group-hover:opacity-70 xl:ml-10">
                                             Kontribusi
                                         </a>
@@ -113,32 +113,14 @@
 
         <footer class="wow fadeInUp relative z-10 bg-[#090E34] h-20 lg:h-[100px] text-white flex justify-center items-center" data-wow-delay=".15s">
             <div class="container">
-                <div class="-mx-4 flex flex-wrap">
-                    <div class="w-full px-4 md:w-2/3 lg:w-1/2">
-                        <div class="my-1">
-                            <div class="-mx-3 flex items-center justify-center md:justify-start">
-                                <a href="javascript:void(0)"
-                                    class="px-3 text-base text-gray-7 hover:text-white hover:underline">
-                                    Privacy policy
-                                </a>
-                                <a href="javascript:void(0)"
-                                    class="px-3 text-base text-gray-7 hover:text-white hover:underline">
-                                    Terms of service
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="w-full px-4 md:w-1/3 lg:w-1/2">
-                        <div class="my-1 flex justify-center md:justify-end">
-                            <p class="text-white text-gray-7">
-                                Designed by
-                                <a href="https://tailgrids.com" rel="nofollow noopner" target="_blank"
-                                    class="text-gray-1 hover:underline">
-                                    TailGrids and UIdeck
-                                </a>
-                            </p>
-                        </div>
-                    </div>
+                <div class="-mx-4 flex justify-center">
+                    <p class="text-white text-gray-7">
+                        Designed by
+                        <a href="https://tailgrids.com" rel="nofollow noopner" target="_blank"
+                            class="text-gray-1 hover:underline">
+                            TailGrids and UIdeck
+                        </a>
+                    </p>
                 </div>
             </div>
         </footer>
