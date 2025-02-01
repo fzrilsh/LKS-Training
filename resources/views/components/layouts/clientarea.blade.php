@@ -57,7 +57,7 @@
 <body class="text-gray-800 bg-gray-100">
     <x-toast /> 
     <div id="app" class="flex flex-col lg:flex-row min-h-screen">
-        <aside id="sidebar" class="fixed lg:relative bg-white w-72 h-full lg:h-screen top-0 left-0 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 z-50 shadow-lg lg:shadow-none">
+        <aside id="sidebar" class="fixed lg:relative bg-white w-72 h-full lg:h-[112vh] top-0 left-0 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 z-50 shadow-lg lg:shadow-none">
             <div class="p-6 flex flex-col gap-8 border-r h-full">
                 <div class="flex justify-between items-center">
                     <img src="{{ asset('images/logo.jpg') }}" alt="Web Technologies Logo" class="w-24 rounded-full">
@@ -80,9 +80,9 @@
                         <i class="fa fa-comments text-lg"></i>
                         <span class="font-medium">Forum Diskusi</span>
                     </a>
-                    <a href="tasks.html" class="flex items-center gap-3 p-3 rounded-lg {{ request()->routeIs('clientarea.as') ? 'bg-blue-200' : 'hover:bg-gray-100' }}">
+                    <a href="{{ route('clientarea.publish-module') }}" class="flex items-center gap-3 p-3 rounded-lg {{ request()->routeIs('clientarea.publish-module') ? 'bg-blue-200' : 'hover:bg-gray-100' }}">
                         <i class="fa fa-hand-holding-heart text-lg"></i>
-                        <span class="font-medium">Kontribusi Modul</span>
+                        <span class="font-medium">Publish Module</span>
                     </a>
                     <a href="{{ route('clientarea.upload-assets') }}" class="flex items-center gap-3 p-3 rounded-lg {{ request()->routeIs('clientarea.upload-assets') ? 'bg-blue-200' : 'hover:bg-gray-100' }}">
                         <i class="fa fa-cloud-upload-alt text-lg"></i>
