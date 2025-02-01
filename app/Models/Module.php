@@ -26,11 +26,11 @@ class Module extends Model
 
     public function Marking(): HasOne
     {
-        return $this->hasOne(ModuleMarking::class, 'module_id', 'id');
+        return $this->hasOne(ModuleMarking::class);
     }
 
     public function Tasks(): HasMany
     {
-        return $this->hasMany(ModuleTask::class, 'module_id', 'id');
+        return $this->hasMany(ModuleTask::class);
     }
 }
