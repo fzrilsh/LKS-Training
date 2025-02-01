@@ -38,11 +38,11 @@ class User extends Authenticatable
     }
 
     public function ModuleTasks(): HasMany{
-        return $this->hasMany(ModuleTask::class, 'user_id', 'id');
+        return $this->hasMany(ModuleTask::class);
     }
 
     public function ModuleToken(): HasOne {
-        return $this->hasOne(ModuleToken::class, 'user_id', 'id');
+        return $this->hasOne(ModuleToken::class);
     }
 
     public function uploadedAssets(): HasMany {
