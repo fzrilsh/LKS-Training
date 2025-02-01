@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Imports\MarkingImport;
 use App\Models\Module;
 use App\Models\ModuleChangelog;
 use App\Models\ModuleToken;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 use ZipArchive;
 
 class ScanModule implements ShouldQueue
@@ -31,7 +33,7 @@ class ScanModule implements ShouldQueue
         $zips->each(function($filename){
             $fullPath = Storage::path($filename);
 
-            $destinationFolderName = now()->format('D-m-Y_H:i:s') . '_' . Str::random(10);
+            $destinationFolderName = now()->format('d-m-Y_pukul H:i:s') . '_' . Str::random(10);
             $destinationFolderPath = Storage::path("modules/{$destinationFolderName}");
 
             $zip = new ZipArchive;
@@ -39,7 +41,7 @@ class ScanModule implements ShouldQueue
                 $zip->extractTo($destinationFolderPath);
                 $zip->close();
 
-                Storage::delete($filename);
+                // Storage::delete($filename);
                 $this->getModuleDetail("modules/{$destinationFolderName}");
             } else {
                 Log::error("Failed to open: {$filename}");
@@ -49,8 +51,10 @@ class ScanModule implements ShouldQueue
 
     public function getModuleDetail(string $path){
         if(!Storage::exists($path . '/readme.txt')){
-            $date = date('D-m-Y H:i', filectime(Storage::path($path)));
-            ModuleChangelog::query()->create(['message' => "Module yang diupload pada {$date} tidak sesuai format."]);
+            $date = date('d-m-Y H:i', filectime(Storage::path($path)));
+            $filename = basename($path);
+
+            ModuleChangelog::query()->create(['message' => "Module yang diupload dengan nama file {$filename} pada {$date} tidak sesuai format."]);
             return $this->deleteModule($path);
         }
 
@@ -58,7 +62,7 @@ class ScanModule implements ShouldQueue
 
         $token = ModuleToken::query()->where('token', $token)->first();
         if(!$token){
-            $date = date('D-m-Y H:i', filectime(Storage::path($path)));
+            $date = date('d-m-Y H:i', filectime(Storage::path($path)));
             ModuleChangelog::query()->create(['message' => "Token untuk module yang diupload pada {$date} tidak valid."]);
             return $this->deleteModule($path);
         }
@@ -87,8 +91,22 @@ class ScanModule implements ShouldQueue
             $errors[] = 'File marking harus berupa xlsx.';
         }
 
+        if(
+            !Storage::exists("{$path}/{$moduleFilename}") ||
+            !Storage::exists("{$path}/{$mediaFilename}") ||
+            !Storage::exists("{$path}/{$markingFilename}")
+        ){
+            $errors[] = 'File wajib seperti Module, Media, atau Marking tidak dapat ditemukan.';
+        }
+
+        if(
+            (Storage::size(Storage::path("{$path}/{$moduleFilename}")) < 1048576) ||
+            (Storage::size(Storage::path("{$path}/{$markingFilename}")) < 500000)
+        ){
+            $errors[] = 'File wajib seperti Module atau Marking kosong.';
+        }
+
         if(!Storage::exists("{$path}/{$moduleFilename}")){
-            Log::info("{$path}/{$moduleFilename}");
             $errors[] = 'File docx module tidak ditemukan.';
         }
 
@@ -100,9 +118,15 @@ class ScanModule implements ShouldQueue
             $errors[] = 'File xlsx marking tidak ditemukan.';
         }
 
+        $markingData = Excel::toArray(new MarkingImport, Storage::path("{$path}/{$markingFilename}"));
+        if(!count($markingData)){
+            $errors[] = 'File xlsx marking tidak sesuai format.';
+        }
+
         if(count($errors)){
-            $date = now()->format('D-m-Y H:i:s');
+            $date = now()->format('d-m-Y pukul H:i:s');
             $error = collect($errors)->join('\n- ');
+
             ModuleChangelog::query()->create(['message' => "Module yang diupload bernama {$name} pada {$date} tidak sesuai format yang telah ditentukan.\n- {$error}"]);
             return $this->deleteModule($path);
         }
@@ -116,6 +140,8 @@ class ScanModule implements ShouldQueue
             'marking_path' => "{$path}/{$markingFilename}",
             'publisher_id' => $token->user_id
         ]);
+
+        $token->delete();
     }
 
     public function parseReadme(string $input): array
