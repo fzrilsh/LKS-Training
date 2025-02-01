@@ -20,7 +20,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="https://github.com/fzrilsh/LKS-Training" target="_blank"
+                                <a href="https://github.com/fzrilsh/WebTech-Academy" target="_blank"
                                     class="flex items-center gap-4 rounded-md bg-white/[0.12] px-6 py-[14px] text-base font-medium text-white transition duration-300 ease-in-out hover:bg-white hover:text-black">
                                     <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" xmlns="http://www.w3.org/2000/svg">
