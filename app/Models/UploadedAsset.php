@@ -11,10 +11,11 @@ class UploadedAsset extends Model
 
     protected $fillable = [
         'user_id',
-        'path'
+        'path',
     ];
 
-    public function User(): BelongsTo{
+    public function User(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 }

@@ -17,15 +17,17 @@ class UploadAssets extends Component
     use Interactions, WithFileUploads;
 
     public $file;
+
     public $files;
 
-    protected function rules(){
+    protected function rules()
+    {
         return [
-            'file' => ['required', 'file', 'max:10240', function($attr, $value, $fail){
-                if (!in_array($value->getMimeType(), ['text/x-php', 'text/plain', 'text/html'])) {
+            'file' => ['required', 'file', 'max:10240', function ($attr, $value, $fail) {
+                if (! in_array($value->getMimeType(), ['text/x-php', 'text/plain', 'text/html'])) {
                     $fail('Hanya file html dan php yang diperbolehkan.');
                 }
-            }]
+            }],
         ];
     }
 
@@ -34,7 +36,8 @@ class UploadAssets extends Component
         'file.mimes' => 'Hanya file html dan php yang diperbolehkan.',
     ];
 
-    public function mount(){
+    public function mount()
+    {
         $this->files = auth('web')->user()->uploadedAssets()->get();
     }
 
@@ -43,13 +46,15 @@ class UploadAssets extends Component
         return view('livewire.client-page.upload-assets');
     }
 
-    public function refreshData(){
+    public function refreshData()
+    {
         $this->files = auth('web')->user()->uploadedAssets()->get();
     }
 
-    public function updated(){
+    public function updated()
+    {
         $validate = Validator::make($this->all(), $this->rules(), $this->messages);
-        if($validate->fails()){
+        if ($validate->fails()) {
             return $this->toast()->timeout(5)->error('Gagal upload file!', collect($validate->errors()->get('file'))->join('\n'))->send();
         }
 
@@ -67,7 +72,8 @@ class UploadAssets extends Component
         $this->toast()->timeout(5)->success('File Disimpan.', "File dengan nama {$filename} berhasil disimpan.")->send();
     }
 
-    public function delete(string $id){
+    public function delete(string $id)
+    {
         $file = auth('web')->user()->uploadedAssets()->find($id);
         $filename = basename($file->path);
 

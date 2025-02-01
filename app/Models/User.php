@@ -23,7 +23,7 @@ class User extends Authenticatable
 
     protected $appends = [
         'module_tasks',
-        'module_token'
+        'module_token',
     ];
 
     protected $hidden = [
@@ -37,23 +37,28 @@ class User extends Authenticatable
         ];
     }
 
-    public function ModuleTasks(): HasMany{
+    public function ModuleTasks(): HasMany
+    {
         return $this->hasMany(ModuleTask::class);
     }
 
-    public function ModuleToken(): HasOne {
+    public function ModuleToken(): HasOne
+    {
         return $this->hasOne(ModuleToken::class);
     }
 
-    public function uploadedAssets(): HasMany {
+    public function uploadedAssets(): HasMany
+    {
         return $this->hasMany(UploadedAsset::class);
     }
 
-    public function getModuleTasksAttribute(){
+    public function getModuleTasksAttribute()
+    {
         return $this->ModuleTasks()->get();
     }
 
-    public function getModuleTokenAttribute(){
+    public function getModuleTokenAttribute()
+    {
         return $this->ModuleToken()->first();
     }
 }

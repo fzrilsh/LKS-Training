@@ -6,9 +6,6 @@ use Maatwebsite\Excel\Concerns\ToArray;
 
 class MarkingImport implements ToArray
 {
-    /**
-    * @param Array $rows
-    */
     public function array(array $rows)
     {
         $filtered = collect($rows)->filter(function ($row) {
@@ -19,7 +16,7 @@ class MarkingImport implements ToArray
             return [
                 'description' => $row[4] ?? null,
                 'total_point' => $row[10] ?? null,
-                'point' => 0
+                'point' => 0,
             ];
         });
 

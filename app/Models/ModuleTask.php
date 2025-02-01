@@ -15,15 +15,18 @@ class ModuleTask extends Model
         'json_marking',
     ];
 
-    public function User(): BelongsTo{
+    public function User(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function Module(): BelongsTo {
+    public function Module(): BelongsTo
+    {
         return $this->belongsTo(Module::class);
     }
 
-    public function Result(): HasOne {
+    public function Result(): HasOne
+    {
         return $this->hasOne(ModuleTaskResult::class, 'module_id', 'id');
     }
 }

@@ -12,10 +12,11 @@ class ModuleMarking extends Model
     protected $fillable = [
         'module_id',
         'json',
-        'max_point'
+        'max_point',
     ];
 
-    public function Module(): BelongsTo {
+    public function Module(): BelongsTo
+    {
         return $this->belongsTo(Module::class);
     }
 }

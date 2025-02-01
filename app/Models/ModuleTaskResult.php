@@ -13,14 +13,16 @@ class ModuleTaskResult extends Model
         'module_task_id',
         'user_id',
         'total_point',
-        'total_time'
+        'total_time',
     ];
 
-    public function ModuleTask(): BelongsTo {
+    public function ModuleTask(): BelongsTo
+    {
         return $this->belongsTo(ModuleTask::class);
     }
 
-    public function User(): BelongsTo {
+    public function User(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 }

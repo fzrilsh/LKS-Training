@@ -15,7 +15,10 @@ class LoggedInMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(auth('web')->check()) return redirect()->route('clientarea.dashboard');
+        if (auth('web')->check()) {
+            return redirect()->route('clientarea.dashboard');
+        }
+
         return $next($request);
     }
 }

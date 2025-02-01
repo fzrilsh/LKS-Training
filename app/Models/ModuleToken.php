@@ -11,10 +11,11 @@ class ModuleToken extends Model
 
     protected $fillable = [
         'user_id',
-        'token'
+        'token',
     ];
 
-    public function User(): BelongsTo{
+    public function User(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 }

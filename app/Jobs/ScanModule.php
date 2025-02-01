@@ -20,24 +20,26 @@ class ScanModule implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(){}
+    public function __construct() {}
 
     public function handle(): void
     {
         $zips = collect(Storage::files('modules-ftp'));
-        $zips->filter(fn($name) => !str_ends_with($name, '.zip'))->each(fn($name) => Storage::delete($name));
+        $zips->filter(fn ($name) => ! str_ends_with($name, '.zip'))->each(fn ($name) => Storage::delete($name));
 
         $zips = collect(Storage::files('modules-ftp'));
-        if(!count($zips)) return;
+        if (! count($zips)) {
+            return;
+        }
 
-        $zips->each(function($filename){
+        $zips->each(function ($filename) {
             $fullPath = Storage::path($filename);
 
-            $destinationFolderName = now()->format('d-m-Y_pukul H:i:s') . '_' . Str::random(10);
+            $destinationFolderName = now()->format('d-m-Y_pukul H:i:s').'_'.Str::random(10);
             $destinationFolderPath = Storage::path("modules/{$destinationFolderName}");
 
             $zip = new ZipArchive;
-            if ($zip->open($fullPath) === TRUE) {
+            if ($zip->open($fullPath) === true) {
                 $zip->extractTo($destinationFolderPath);
                 $zip->close();
 
@@ -49,85 +51,95 @@ class ScanModule implements ShouldQueue
         });
     }
 
-    public function getModuleDetail(string $path){
-        if(!Storage::exists($path . '/readme.txt')){
+    public function getModuleDetail(string $path)
+    {
+        if (! Storage::exists($path.'/readme.txt')) {
             $date = date('d-m-Y H:i', filectime(Storage::path($path)));
             $filename = basename($path);
 
             ModuleChangelog::query()->create(['message' => "Module yang diupload dengan nama file {$filename} pada {$date} tidak sesuai format."]);
+
             return $this->deleteModule($path);
         }
 
-        [$token, $name, $category, $summary, $moduleFilename, $mediaFilename, $markingFilename] = $this->parseReadme(Storage::get($path . '/readme.txt'));
+        [$token, $name, $category, $summary, $moduleFilename, $mediaFilename, $markingFilename] = $this->parseReadme(Storage::get($path.'/readme.txt'));
 
         $token = ModuleToken::query()->where('token', $token)->first();
-        if(!$token){
+        if (! $token) {
             $date = date('d-m-Y H:i', filectime(Storage::path($path)));
             ModuleChangelog::query()->create(['message' => "Token untuk module yang diupload pada {$date} tidak valid."]);
+
             return $this->deleteModule($path);
         }
 
         $errors = [];
         $validator = Validator::make(['name' => $name, 'category' => $category, 'summary' => $summary], [
-            'name' => 'required|unique:modules,name', 
+            'name' => 'required|unique:modules,name',
             'category' => 'required',
-            'summary' => 'required'
+            'summary' => 'required',
         ]);
-        if($validator->fails()) {
-            if($validator->errors()->has('name')) $errors[] = 'Nama harus unik.';
-            if($validator->errors()->has('category')) $errors[] = 'Category harus dicantumkan.';
-            if($validator->errors()->has('summary')) $errors[] = 'Summary harus dicantumkan.';
+        if ($validator->fails()) {
+            if ($validator->errors()->has('name')) {
+                $errors[] = 'Nama harus unik.';
+            }
+            if ($validator->errors()->has('category')) {
+                $errors[] = 'Category harus dicantumkan.';
+            }
+            if ($validator->errors()->has('summary')) {
+                $errors[] = 'Summary harus dicantumkan.';
+            }
         }
 
-        if(!str_ends_with($moduleFilename, '.docx')){
+        if (! str_ends_with($moduleFilename, '.docx')) {
             $errors[] = 'File module harus berupa docx.';
         }
 
-        if(!str_ends_with($mediaFilename, '.zip')){
+        if (! str_ends_with($mediaFilename, '.zip')) {
             $errors[] = 'Media file harus berupa zip.';
         }
 
-        if(!str_ends_with($markingFilename, '.xlsx')){
+        if (! str_ends_with($markingFilename, '.xlsx')) {
             $errors[] = 'File marking harus berupa xlsx.';
         }
 
-        if(
-            !Storage::exists("{$path}/{$moduleFilename}") ||
-            !Storage::exists("{$path}/{$mediaFilename}") ||
-            !Storage::exists("{$path}/{$markingFilename}")
-        ){
+        if (
+            ! Storage::exists("{$path}/{$moduleFilename}") ||
+            ! Storage::exists("{$path}/{$mediaFilename}") ||
+            ! Storage::exists("{$path}/{$markingFilename}")
+        ) {
             $errors[] = 'File wajib seperti Module, Media, atau Marking tidak dapat ditemukan.';
         }
 
-        if(
+        if (
             (Storage::size(Storage::path("{$path}/{$moduleFilename}")) < 1048576) ||
             (Storage::size(Storage::path("{$path}/{$markingFilename}")) < 500000)
-        ){
+        ) {
             $errors[] = 'File wajib seperti Module atau Marking kosong.';
         }
 
-        if(!Storage::exists("{$path}/{$moduleFilename}")){
+        if (! Storage::exists("{$path}/{$moduleFilename}")) {
             $errors[] = 'File docx module tidak ditemukan.';
         }
 
-        if(!Storage::exists("{$path}/{$mediaFilename}")){
+        if (! Storage::exists("{$path}/{$mediaFilename}")) {
             $errors[] = 'File zip media tidak ditemukan.';
         }
 
-        if(!Storage::exists("{$path}/{$markingFilename}")){
+        if (! Storage::exists("{$path}/{$markingFilename}")) {
             $errors[] = 'File xlsx marking tidak ditemukan.';
         }
 
         $markingData = Excel::toArray(new MarkingImport, Storage::path("{$path}/{$markingFilename}"));
-        if(!count($markingData)){
+        if (! count($markingData)) {
             $errors[] = 'File xlsx marking tidak sesuai format.';
         }
 
-        if(count($errors)){
+        if (count($errors)) {
             $date = now()->format('d-m-Y pukul H:i:s');
             $error = collect($errors)->join('\n- ');
 
             ModuleChangelog::query()->create(['message' => "Module yang diupload bernama {$name} pada {$date} tidak sesuai format yang telah ditentukan.\n- {$error}"]);
+
             return $this->deleteModule($path);
         }
 
@@ -138,7 +150,7 @@ class ScanModule implements ShouldQueue
             'media_path' => "{$path}/{$mediaFilename}",
             'exercise_path' => "{$path}/{$moduleFilename}",
             'marking_path' => "{$path}/{$markingFilename}",
-            'publisher_id' => $token->user_id
+            'publisher_id' => $token->user_id,
         ]);
 
         $token->delete();
@@ -155,7 +167,7 @@ class ScanModule implements ShouldQueue
                 continue;
             }
 
-            $value = trim(explode(":", $line, 2)[1]);
+            $value = trim(explode(':', $line, 2)[1]);
 
             $result[] = $value;
         }
@@ -163,7 +175,8 @@ class ScanModule implements ShouldQueue
         return $result;
     }
 
-    public function deleteModule(string $path): void{
+    public function deleteModule(string $path): void
+    {
         File::deleteDirectory(Storage::path($path));
     }
 }

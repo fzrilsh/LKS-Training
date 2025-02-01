@@ -16,18 +16,21 @@ class Module extends Model
         'media_path',
         'exercise_path',
         'marking_path',
-        'publisher_id'
+        'publisher_id',
     ];
 
-    public function Publisher(): BelongsTo{
+    public function Publisher(): BelongsTo
+    {
         return $this->belongsTo(User::class, 'publisher_id');
     }
 
-    public function Marking(): HasOne {
+    public function Marking(): HasOne
+    {
         return $this->hasOne(ModuleMarking::class, 'module_id', 'id');
     }
 
-    public function Tasks(): HasMany {
+    public function Tasks(): HasMany
+    {
         return $this->hasMany(ModuleTask::class, 'module_id', 'id');
     }
 }
