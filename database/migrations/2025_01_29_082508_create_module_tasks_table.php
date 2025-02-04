@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete();
             $table->foreignId('module_id')->constrained('modules', 'id')->cascadeOnDelete();
-            $table->enum('status', ['uncompleted', 'on-marking', 'completed'])->default('uncompleted');
+            $table->enum('status', ['not-completed', 'on-marking', 'completed'])->default('not-completed');
             $table->json('json_marking');
             $table->timestamps();
         });

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('module_task_id')->constrained('module_tasks', 'id')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete();
             $table->float('total_point')->nullable();
-            $table->time('total_time')->nullable();
+            $table->timestamps();
         });
     }
 

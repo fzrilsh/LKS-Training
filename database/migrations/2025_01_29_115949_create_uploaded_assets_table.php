@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('uploaded_assets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('path');
         });
     }

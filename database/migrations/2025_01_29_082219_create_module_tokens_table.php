@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('module_tokens', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete()->cascadeOnDelete();
             $table->string('token');
         });
     }

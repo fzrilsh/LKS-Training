@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('media_path');
             $table->string('exercise_path')->comment('file word');
             $table->string('marking_path');
-            $table->foreignId('publisher_id')->constrained('users', 'id');
+            $table->foreignId('publisher_id')->constrained('users', 'id')->cascadeOnDelete();
             $table->timestamps();
         });
     }
