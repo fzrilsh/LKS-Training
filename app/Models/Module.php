@@ -19,6 +19,8 @@ class Module extends Model
         'publisher_id',
     ];
 
+    protected $appends = ['marking', 'tasks', 'attempts'];
+
     public function Publisher(): BelongsTo
     {
         return $this->belongsTo(User::class, 'publisher_id');
@@ -32,5 +34,17 @@ class Module extends Model
     public function Tasks(): HasMany
     {
         return $this->hasMany(ModuleTask::class);
+    }
+
+    public function getMarkingAttribute(){
+        return $this->Marking()->first();
+    }
+
+    public function getTasksAttribute(){
+        return $this->Tasks()->get();
+    }
+
+    public function getAttemptsAttribute(){
+        return $this->Tasks()->get()->count();
     }
 }
