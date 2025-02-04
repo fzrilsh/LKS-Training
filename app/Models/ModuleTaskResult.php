@@ -7,13 +7,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ModuleTaskResult extends Model
 {
-    public $timestamps = false;
-
     protected $fillable = [
         'module_task_id',
         'user_id',
         'total_point',
-        'total_time',
     ];
 
     public function ModuleTask(): BelongsTo
