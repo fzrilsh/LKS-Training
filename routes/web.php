@@ -3,7 +3,9 @@
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Middleware\LoggedInMiddleware;
 use App\Livewire\Auth\Login;
+use App\Livewire\ClientPage\AddTask;
 use App\Livewire\ClientPage\Dashboard;
+use App\Livewire\ClientPage\ModuleDetail;
 use App\Livewire\ClientPage\PublishModule;
 use App\Livewire\ClientPage\UploadAssets;
 use App\Livewire\LandingPage;
@@ -22,6 +24,8 @@ Route::middleware(['auth:web'])->group(function () {
 
     Route::group(['prefix' => 'clientarea', 'as' => 'clientarea'], function () {
         Route::get('/', Dashboard::class)->name('.dashboard');
+        Route::get('/task/new', AddTask::class)->name('.add-task');
+        Route::get('/task/{task_id}', ModuleDetail::class)->name('.detail-task');
         Route::get('/upload-assets', UploadAssets::class)->name('.upload-assets');
         Route::get('/publish-module', PublishModule::class)->name('.publish-module');
     });
