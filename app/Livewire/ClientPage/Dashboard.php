@@ -10,8 +10,14 @@ use Livewire\Component;
 #[Title('Dashboard | Client Area')]
 class Dashboard extends Component
 {
+    public function with(): array{
+        return [
+            'tasks' => auth('web')->user()->module_tasks
+        ];
+    }
+
     public function render()
     {
-        return view('livewire.client-page.dashboard');
+        return view('livewire.client-page.dashboard', $this->with());
     }
 }
