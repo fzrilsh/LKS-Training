@@ -15,6 +15,8 @@ class ModuleTask extends Model
         'json_marking',
     ];
 
+    protected $appends = ['module', 'grade'];
+
     public function User(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -25,8 +27,12 @@ class ModuleTask extends Model
         return $this->belongsTo(Module::class);
     }
 
-    public function Result(): HasOne
-    {
-        return $this->hasOne(ModuleTaskResult::class, 'module_id', 'id');
+    public function getModuleAttribute(){
+        return $this->Module()->first();
+    }
+
+    public function getGradeAttribute(){
+        $marking = collect(json_decode($this->json_marking, true));
+        return $marking->reduce(fn($a, $b) => $a + $b['point']) . " point";
     }
 }
