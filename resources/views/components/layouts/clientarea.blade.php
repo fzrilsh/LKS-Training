@@ -97,7 +97,7 @@
         </aside>
 
         <main class="flex-1 p-6 lg:p-12 bg-gray-50">
-            <header class="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm mb-6">
+            <header class="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm mb-6 gap-2 max-w-4xl">
                 <button id="hamburgerButton" class="lg:hidden" aria-label="Open Sidebar">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
@@ -105,7 +105,7 @@
                             d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
-                <form class="flex items-center h-10 w-36 lg:w-1/2 bg-gray-100 rounded-full px-4 py-2">
+                <form class="flex items-center h-10 w-[60%] lg:w-1/2 bg-gray-100 rounded-full px-4 py-2">
                     <input type="text" class="bg-transparent border-none w-full focus:outline-none text-sm" placeholder="Search ..." aria-label="Search">
                     <button type="submit" class="text-gray-500">
                         <img src="{{ asset('images/icons/search-normal.svg') }}" alt="Search Icon" class="w-5 h-5">
