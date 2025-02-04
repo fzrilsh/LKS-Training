@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ModuleTask extends Model
 {
@@ -27,12 +26,15 @@ class ModuleTask extends Model
         return $this->belongsTo(Module::class);
     }
 
-    public function getModuleAttribute(){
+    public function getModuleAttribute()
+    {
         return $this->Module()->first();
     }
 
-    public function getGradeAttribute(){
+    public function getGradeAttribute()
+    {
         $marking = collect(json_decode($this->json_marking, true));
-        return $marking->reduce(fn($a, $b) => $a + $b['point']) . " point";
+
+        return $marking->reduce(fn ($a, $b) => $a + $b['point']).' point';
     }
 }

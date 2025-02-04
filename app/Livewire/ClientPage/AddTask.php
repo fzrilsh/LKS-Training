@@ -16,46 +16,54 @@ class AddTask extends Component
     use Interactions;
 
     public User $user;
+
     public int $selectedModule;
+
     public ?Module $selectedModuleInstance;
+
     public $categories;
 
-    public function mount(){
+    public function mount()
+    {
         $this->user = auth('web')->user();
-        $this->categories = Module::all()->map(fn($v) => ['id' => $v->id, 'name' => $v->name, 'description' => strtoupper($v->category)])->values();
+        $this->categories = Module::all()->map(fn ($v) => ['id' => $v->id, 'name' => $v->name, 'description' => strtoupper($v->category)])->values();
     }
-    
+
     public function render()
     {
         return view('livewire.client-page.add-task');
     }
 
-    public function updatedselectedModule($value){
+    public function updatedselectedModule($value)
+    {
         $this->selectedModuleInstance = Module::query()->find($value);
     }
 
-    public function checkTask(){
-        if($this->user->ModuleTasks()->getQuery()->where('module_id', $this->selectedModule)->first()){
+    public function checkTask()
+    {
+        if ($this->user->ModuleTasks()->getQuery()->where('module_id', $this->selectedModule)->first()) {
             $this->toast()
                 ->timeout(10)
                 ->question('Module Sudah Pernah Dikerjakan.', 'Kamu sudah pernah mengerjakan module ini, ingin kerjakan lagi?')
                 ->confirm('IYA', 'startModule')
                 ->cancel('TIDAK')
                 ->send();
-            
+
             return false;
         }
 
         $this->startModule();
     }
 
-    public function startModule(){
+    public function startModule()
+    {
         $task = $this->selectedModuleInstance->Tasks()->create([
             'user_id' => $this->user->id,
-            'json_marking' => $this->selectedModuleInstance->marking->json
+            'json_marking' => $this->selectedModuleInstance->marking->json,
         ]);
 
         $this->toast()->timeout(5)->success('Selamat Mengerjakan!', 'Module berhasil di daftarkan, selamat mengerjakan.')->flash()->send();
+
         return redirect()->route('clientarea.detail-task', $task);
     }
 }

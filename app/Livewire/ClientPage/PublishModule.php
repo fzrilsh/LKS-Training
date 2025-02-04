@@ -34,8 +34,10 @@ class PublishModule extends Component
         return view('livewire.client-page.publish-module', $this->with());
     }
 
-    public function downloadTemplate(){
+    public function downloadTemplate()
+    {
         $this->toast()->timeout(5)->success('File Downloaded.', 'Template format berhasil di download.')->send();
+
         return response()->download(Storage::path('contoh.zip'));
     }
 }

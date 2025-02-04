@@ -153,7 +153,7 @@ class ScanModule implements ShouldQueue
 
         $module->Marking()->create([
             'json' => json_encode($markingData->toArray()),
-            'max_point' => $markingData->reduce(fn($a, $b) => $a + $b['total_point'])
+            'max_point' => $markingData->reduce(fn ($a, $b) => $a + $b['total_point']),
         ]);
 
         $token->delete();
@@ -184,12 +184,15 @@ class ScanModule implements ShouldQueue
         File::deleteDirectory(Storage::path($path));
     }
 
-    public function parseExcel(array $rows): Collection{
+    public function parseExcel(array $rows): Collection
+    {
         $headers = $rows[0];
 
         $columns = [];
         foreach ($headers as $index => $header) {
-            if(is_null($header)) continue;
+            if (is_null($header)) {
+                continue;
+            }
 
             if (str_contains(strtolower($header), 'aspect - description')) {
                 $columns['description'] = $index;
@@ -204,7 +207,9 @@ class ScanModule implements ShouldQueue
             }
         }
 
-        if(!count($columns)) return collect([]);
+        if (! count($columns)) {
+            return collect([]);
+        }
 
         $filtered = collect($rows)->filter(function ($row) {
             return isset($row[3]) && $row[3] === 'M';

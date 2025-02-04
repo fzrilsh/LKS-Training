@@ -10,9 +10,10 @@ use Livewire\Component;
 #[Title('Dashboard | Client Area')]
 class Dashboard extends Component
 {
-    public function with(): array{
+    public function with(): array
+    {
         return [
-            'tasks' => auth('web')->user()->module_tasks
+            'tasks' => auth('web')->user()->module_tasks,
         ];
     }
 

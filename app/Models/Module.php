@@ -36,15 +36,18 @@ class Module extends Model
         return $this->hasMany(ModuleTask::class);
     }
 
-    public function getMarkingAttribute(){
+    public function getMarkingAttribute()
+    {
         return $this->Marking()->first();
     }
 
-    public function getTasksAttribute(){
+    public function getTasksAttribute()
+    {
         return $this->Tasks()->get();
     }
 
-    public function getAttemptsAttribute(){
+    public function getAttemptsAttribute()
+    {
         return $this->Tasks()->get()->count();
     }
 }
